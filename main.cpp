@@ -68,116 +68,8 @@ void Axe::aConstMemberFunction() const { }
 #include "Cat.h"
 #include "VendingMachine.h"
 #include "ItemDispenser.h"
-
-/*
- copied UDT 3:
- */
-struct Computer
-{
-    Computer();
-    ~Computer();
-    int numCPUCores = 6;
-    float CPUFrequencyGHz = 3.4f;
-    int memoryMB = 32;
-    int powerNeededW = 430;
-    std::string operatingSystem = "Solaris";
-
-    struct Drive 
-    {
-        Drive();
-        ~Drive();
-        std::string brand = "Seagate";
-        float capacityGB = 2000.0f;
-        int standardRpm = 7200;
-        float readSpeedMBs = 101.1f;
-        float writeSpeedMs = 74.2f;
-
-        int readData(int address) const; 
-        
-        bool writeData(int address, int data) const; 
-
-        void parkHeads() const; 
-    };
-
-    Drive cDrive;
-
-    bool bootUp(const Drive& systemDrive) const; 
-
-    bool runProgram(const Drive& programDrive, std::string path) const; 
-
-    bool crash() const;
-
-    JUCE_LEAK_DETECTOR(Computer)
-};
-
-Computer::Computer()
-{
-    std::cout << "Computer being constructed" << std::endl;
-}
-
-Computer::~Computer()
-{
-    std::cout << "Computer being destructed" << std::endl;
-}
-
-Computer::Drive::Drive()
-{
-    std::cout << "Computer::Drive being constructed" << std::endl;
-}
-
-Computer::Drive::~Drive()
-{
-    std::cout << "Computer::Drive being destructed" << std::endl;
-}
-
-int Computer::Drive::readData(int address) const
-{
-    return address * rand();
-}
-
-bool Computer::Drive::writeData(int address, int data) const
-{
-    return ((rand() * address * data) % 1000000) != 0; // Very bad harddrive!
-}
-
-void Computer::Drive::parkHeads() const
-{
-    std::cout << ((rand() % 1000000) != 0 ? "Heads parked" : "Failed to park heads!") << std::endl;
-}
-
-bool Computer::bootUp(const Drive& systemDrive) const
-{
-    return systemDrive.readData(rand()) != 0;
-}
-
-bool Computer::runProgram(const Drive& programDrive, std::string path) const
-{
-    std::cout << "Running " << path << " on " << programDrive.brand << std::endl;
-    return true;
-}
-
-bool Computer::crash() const
-{
-    if (operatingSystem == "Solaris") 
-    {
-        return false;
-    }
-    return (rand() % 1000000) == 0;
-}
-
-struct ComputerWrapper
-{
-    Computer* computerPtr;
-    ComputerWrapper(Computer* ptrToComputer) : computerPtr(ptrToComputer)
-    {
-        std::cout << "+++ ComputerWrapper +++" << std::endl;
-    }
-    ~ComputerWrapper()
-    {
-        delete computerPtr;
-        std::cout << "/// ComputerWrapper ///" << std::endl;
-    }
-};
+#include "Computer.h"
+#include "Drive.h"
 
 /*
  new UDT 4:
@@ -408,27 +300,27 @@ int main()
     ComputerWrapper computerWrapper( new Computer() );
     std::cout 
         << "--- "
-        << "Computer booted: " << (computerWrapper.computerPtr->bootUp(computerWrapper.computerPtr->cDrive) ? "Yes" : "No") << "\n"
+        << "Computer booted: " << (computerWrapper.computerPtr->bootUp(*computerWrapper.computerPtr->cDrive) ? "Yes" : "No") << "\n"
         << "Number of cores: " << computerWrapper.computerPtr->numCPUCores << "\n"
         << "CPU Frequency: " << computerWrapper.computerPtr->CPUFrequencyGHz << "GHz\n"
         << "RAM: " << computerWrapper.computerPtr->memoryMB << "MB\n"
         << "Power needed: " << computerWrapper.computerPtr->powerNeededW << "W\n"
         << "Operating system: " << computerWrapper.computerPtr->operatingSystem << "\n"
-        << "*** Drive brand: " << computerWrapper.computerPtr->cDrive.brand << "\n"
-        << "*** Drive capacity: " << computerWrapper.computerPtr->cDrive.capacityGB << "GB\n"
-        << "*** Drive RPM: " << computerWrapper.computerPtr->cDrive.standardRpm << "\n"
-        << "*** Drive read speed: " << computerWrapper.computerPtr->cDrive.readSpeedMBs << "MB/s\n"
+        << "*** Drive brand: " << computerWrapper.computerPtr->cDrive->brand << "\n"
+        << "*** Drive capacity: " << computerWrapper.computerPtr->cDrive->capacityGB << "GB\n"
+        << "*** Drive RPM: " << computerWrapper.computerPtr->cDrive->standardRpm << "\n"
+        << "*** Drive read speed: " << computerWrapper.computerPtr->cDrive->readSpeedMBs << "MB/s\n"
         << "--- "
-        << "*** Data read at address 123: " << computerWrapper.computerPtr->cDrive.readData(123) << "\n"
+        << "*** Data read at address 123: " << computerWrapper.computerPtr->cDrive->readData(123) << "\n"
         << "--- "
-        << "*** Writing data 456 at address 678 successful?: " << (computerWrapper.computerPtr->cDrive.writeData(678, 456) ? "Yes" : "No") << "\n"
+        << "*** Writing data 456 at address 678 successful?: " << (computerWrapper.computerPtr->cDrive->writeData(678, 456) ? "Yes" : "No") << "\n"
         << "--- ";
-    computerWrapper.computerPtr->runProgram(computerWrapper.computerPtr->cDrive, "/usr/local/games/pacman/pacman");
+    computerWrapper.computerPtr->runProgram(*computerWrapper.computerPtr->cDrive, "/usr/local/games/pacman/pacman");
     std::cout 
         << "--- "
         << "Computer crashed: " << (computerWrapper.computerPtr->crash() ? "Yes :(" : "No") << "\n"
         << "--- ";
-    computerWrapper.computerPtr->cDrive.parkHeads();
+    computerWrapper.computerPtr->cDrive->parkHeads();
     std::cout << std::endl;
     
     CatCyberOverlordWrapper catCyberOverlordWrapper( new CatCyberOverlord() );

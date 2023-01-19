@@ -23,3 +23,13 @@ VendingMachineWrapper::~VendingMachineWrapper()
     std::cout << "/// VendingMachineWrapper ///" << std::endl;
 }
 
+ComputerWrapper::ComputerWrapper(Computer* ptrToComputer) : computerPtr(ptrToComputer)
+{
+    std::cout << "+++ ComputerWrapper +++" << std::endl;
+}
+
+ComputerWrapper::~ComputerWrapper()
+{
+    delete computerPtr;
+    std::cout << "/// ComputerWrapper ///" << std::endl;
+}
