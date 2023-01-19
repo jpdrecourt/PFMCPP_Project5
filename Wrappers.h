@@ -2,6 +2,7 @@
 #include "Cat.h"
 #include "VendingMachine.h"
 #include "Computer.h"
+#include "CatCyberOverlord.h"
 
 struct CatWrapper
 {
@@ -23,3 +24,11 @@ struct ComputerWrapper
     ComputerWrapper(Computer* ptrToComputer);
     ~ComputerWrapper();
 };
+
+struct CatCyberOverlordWrapper 
+{
+    CatCyberOverlord* catCyberOverlordPtr = nullptr;
+    CatCyberOverlordWrapper(CatCyberOverlord* ptrToCatCyberOverlord);
+    ~CatCyberOverlordWrapper();
+};
+

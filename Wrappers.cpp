@@ -33,3 +33,16 @@ ComputerWrapper::~ComputerWrapper()
     delete computerPtr;
     std::cout << "/// ComputerWrapper ///" << std::endl;
 }
+
+CatCyberOverlordWrapper::CatCyberOverlordWrapper(CatCyberOverlord* ptrToCatCyberOverlord) : catCyberOverlordPtr(ptrToCatCyberOverlord)
+{
+    std::cout << "+++ CatCyberOverlordWrapper +++" << std::endl;    
+}
+
+CatCyberOverlordWrapper::~CatCyberOverlordWrapper()
+{
+    delete catCyberOverlordPtr;
+    std::cout << "/// CatCyberOverlordWrapper ///" << std::endl;
+}
+
+
