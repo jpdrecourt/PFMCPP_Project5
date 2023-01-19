@@ -64,142 +64,10 @@ void Axe::aConstMemberFunction() const { }
 #include <iostream>
 #include <iomanip>
 #include "LeakedObjectDetector.h"
-#include "Cat.h"
 #include "Wrappers.h"
-
-/*
- copied UDT 2:
- */
-struct VendingMachine
-{
-    VendingMachine();
-    ~VendingMachine();
-    bool isOn = true;
-    float interiorTemperatureCelsius = 10.2f;
-    float targetTemperatureCelsius = 8.5f;
-    float cashCollectedEuros = 123.54f;
-    int itemSelected = 13;
-
-    struct ItemDispenser
-    {
-        ItemDispenser();
-        ~ItemDispenser();
-        std::string name = "KitKat";
-        std::string flavour = "Original";
-        int inventory = 5;
-        float priceEuros = 2.5f;
-        int itemNumber = 13;
-        bool isDisabled = false;
-
-        bool distributeItems(int numberOfItems); 
-
-        void stockUp(int itemsAdded); 
-
-        void disable(std::string cause); 
-    };
-
-    ItemDispenser kitkatDispenser;
-
-    float chargeCustomerEuros(const ItemDispenser& item, int numberOfItems) const; 
-
-    bool dispenseKitkat(int numberOfItems); 
-
-    void refrigerate() const;
-
-    JUCE_LEAK_DETECTOR(VendingMachine)
-};
-
-VendingMachine::VendingMachine()
-{
-    std::cout << "VendingMachine being constructed" << std::endl;
-}
-
-VendingMachine::~VendingMachine()
-{
-    std::cout << "VendingMachine being destructed" << std::endl;
-}
-
-VendingMachine::ItemDispenser::ItemDispenser() :
-name("KitKat"),
-flavour("Original"),
-inventory(5),
-priceEuros(2.5f),
-itemNumber(13),
-isDisabled(false)
-{
-    std::cout << "VendingMachine::ItemDispenser being constructed" << std::endl;
-}
-
-VendingMachine::ItemDispenser::~ItemDispenser()
-{
-    std::cout << "VendingMachine::ItemDispenser being destructed" << std::endl;
-}
-
-bool VendingMachine::ItemDispenser::distributeItems(int numberOfItems)
-{
-    for (int i = 0; i < numberOfItems; ++i)
-    {
-        std::cout << "Distributing item\n";
-        --inventory;
-        if (inventory == 0) 
-        {
-            disable("Empty");
-            ++i;
-            return (i == numberOfItems);
-        }
-    }
-    return true;
-}
-
-void VendingMachine::ItemDispenser::stockUp(int itemsAdded)
-{
-    inventory += itemsAdded;
-    isDisabled = false;
-}
-
-void VendingMachine::ItemDispenser::disable(std::string cause)
-{
-    if (cause == "Empty") 
-    {
-        std::cout << "Please restock " << name << " - " << flavour << std::endl;
-    }
-    isDisabled = true;
-}
-
-float VendingMachine::chargeCustomerEuros(const ItemDispenser& item, int numberOfItems) const
-{
-    float priceCharged = 0.0f;
-    for (int i = 0; i < numberOfItems; i++)
-    {
-        priceCharged += item.priceEuros;        
-    }
-    return priceCharged;
-}
-
-bool VendingMachine::dispenseKitkat(int numberOfItems)
-{
-    std::cout << "Attempt at dispensing " << numberOfItems << " items\n";
-    return kitkatDispenser.distributeItems(numberOfItems);
-}
-
-void VendingMachine::refrigerate() const
-{
-    std::cout << (interiorTemperatureCelsius > targetTemperatureCelsius ? "Refrigeration in progress..." : "No refrigeration needed") << std::endl;
-}
-
-struct VendingMachineWrapper
-{
-    VendingMachine* vendingMachinePtr;
-    VendingMachineWrapper(VendingMachine* ptrToVendingMachine) : vendingMachinePtr(ptrToVendingMachine)
-    {
-        std::cout << "+++ VendingMachineWrapper +++" << std::endl;
-    }
-    ~VendingMachineWrapper()
-    {
-        delete vendingMachinePtr;
-        std::cout << "/// VendingMachineWrapper ///" << std::endl;
-    }
-};
+#include "Cat.h"
+#include "VendingMachine.h"
+#include "ItemDispenser.h"
 
 /*
  copied UDT 3:
@@ -413,18 +281,18 @@ cat(rentalCat)
     std::cout << "Repurposing the Kitkat dispenser should be straightforward.\n";
     vendingMachine.interiorTemperatureCelsius = 25.0f;
     vendingMachine.targetTemperatureCelsius = 25.0f;
-    vendingMachine.kitkatDispenser.name = "Garfield";
-    vendingMachine.kitkatDispenser.flavour = cat.colour;
-    vendingMachine.kitkatDispenser.inventory = 1;
-    vendingMachine.kitkatDispenser.priceEuros = 50.0f;
+    vendingMachine.kitkatDispenser->name = "Garfield";
+    vendingMachine.kitkatDispenser->flavour = cat.colour;
+    vendingMachine.kitkatDispenser->inventory = 1;
+    vendingMachine.kitkatDispenser->priceEuros = 50.0f;
     std::cout 
         << "New parameters: \n"
         << std::setprecision(1)
         << "Temperature: " << vendingMachine.interiorTemperatureCelsius << "\n"
-        << "Product name: " << vendingMachine.kitkatDispenser.name << "\n"
-        << "Product flavour: " << vendingMachine.kitkatDispenser.flavour << "\n"
+        << "Product name: " << vendingMachine.kitkatDispenser->name << "\n"
+        << "Product flavour: " << vendingMachine.kitkatDispenser->flavour << "\n"
         << std::setprecision(2)
-        << "Product price: " <<     vendingMachine.kitkatDispenser.priceEuros << std::endl;
+        << "Product price: " <<     vendingMachine.kitkatDispenser->priceEuros << std::endl;
 }
 
 CatRentalMachine::~CatRentalMachine()
@@ -435,7 +303,7 @@ CatRentalMachine::~CatRentalMachine()
 Cat CatRentalMachine::distributeCat() const
 {
     std::cout << "Distributing a cat for rental\n";
-    std::cout << "His name is " << vendingMachine.kitkatDispenser.name << "\n";
+    std::cout << "His name is " << vendingMachine.kitkatDispenser->name << "\n";
     return cat;
 }
 
@@ -513,28 +381,28 @@ int main()
         << "Cash collected: " << vendingMachineWrapper.vendingMachinePtr->cashCollectedEuros << "€\n" 
         << "Item selected: " << vendingMachineWrapper.vendingMachinePtr->itemSelected << "\n"
         << "--- "
-        << "Charging customer for 5 items: " << vendingMachineWrapper.vendingMachinePtr->chargeCustomerEuros(vendingMachineWrapper.vendingMachinePtr->kitkatDispenser, 5) << "€\n"
-        << "*** Dispenser number: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.itemNumber << "\n"
+        << "Charging customer for 5 items: " << vendingMachineWrapper.vendingMachinePtr->chargeCustomerEuros(*vendingMachineWrapper.vendingMachinePtr->kitkatDispenser, 5) << "€\n"
+        << "*** Dispenser number: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->itemNumber << "\n"
         << "*** "
-        << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.isDisabled ? "Disabled" : "Activated") << "\n"
-        << "*** Product: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.name << "\n"
-        << "*** Flavour: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.flavour << "\n"
-        << "*** Inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.inventory << "\n"
-        << "*** Price: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.priceEuros << "€\n"
+        << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->isDisabled ? "Disabled" : "Activated") << "\n"
+        << "*** Product: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->name << "\n"
+        << "*** Flavour: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->flavour << "\n"
+        << "*** Inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->inventory << "\n"
+        << "*** Price: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->priceEuros << "€\n"
         << "--- "
         << (vendingMachineWrapper.vendingMachinePtr->dispenseKitkat(6) ? "Successfully" : "Unsuccessfully") << " dispensed\n"
         << "--- "
-        << "New item dispenser state: " << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.isDisabled ? "Disabled" : "Activated") << "\n";
+        << "New item dispenser state: " << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->isDisabled ? "Disabled" : "Activated") << "\n";
     
-    vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.stockUp(3);
+    vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->stockUp(3);
     std::cout 
         << "--- "
-        << "New item dispenser inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.inventory << "\n"
-        << "New item dispenser state: " << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.isDisabled ? "Disabled" : "Activated") << "\n"
+        << "New item dispenser inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->inventory << "\n"
+        << "New item dispenser state: " << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->isDisabled ? "Disabled" : "Activated") << "\n"
         << "--- "
         << (vendingMachineWrapper.vendingMachinePtr->dispenseKitkat(2) ? "Successfully" : "Unsuccessfully") << " dispensed\n"
         << "--- "
-        << "New item dispenser inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.inventory << "\n";
+        << "New item dispenser inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->inventory << "\n";
     
     std::cout << std::endl;
     ComputerWrapper computerWrapper( new Computer() );

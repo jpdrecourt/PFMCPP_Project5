@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include "LeakedObjectDetector.h"
 #include "Cat.h"
 
 Cat::Cat() :
