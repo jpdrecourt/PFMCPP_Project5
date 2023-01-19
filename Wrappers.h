@@ -3,6 +3,7 @@
 #include "VendingMachine.h"
 #include "Computer.h"
 #include "CatCyberOverlord.h"
+#include "CatRentalMachine.h"
 
 struct CatWrapper
 {
@@ -32,3 +33,9 @@ struct CatCyberOverlordWrapper
     ~CatCyberOverlordWrapper();
 };
 
+struct CatRentalMachineWrapper
+{
+    CatRentalMachine* catRentalMachinePtr = nullptr;
+    CatRentalMachineWrapper(CatRentalMachine* ptrToCatRentalMachine);
+    ~CatRentalMachineWrapper();
+};

@@ -45,4 +45,16 @@ CatCyberOverlordWrapper::~CatCyberOverlordWrapper()
     std::cout << "/// CatCyberOverlordWrapper ///" << std::endl;
 }
 
+CatRentalMachineWrapper::CatRentalMachineWrapper(CatRentalMachine* ptrToCatRentalMachine) : catRentalMachinePtr(ptrToCatRentalMachine)
+{
+    std::cout << "+++ CatRentalMachineWrapper +++" << std::endl;
+}
+
+CatRentalMachineWrapper::~CatRentalMachineWrapper()
+{
+    delete catRentalMachinePtr;
+    std::cout << "/// CatRentalMachineWrapper ///" << std::endl;
+}
+
+
 
