@@ -67,9 +67,7 @@ void Axe::aConstMemberFunction() const { }
 #include "Wrappers.h"
 #include "Cat.h"
 #include "VendingMachine.h"
-#include "ItemDispenser.h"
 #include "Computer.h"
-#include "Drive.h"
 #include "CatCyberOverlord.h"
 #include "CatRentalMachine.h"
 
@@ -121,54 +119,54 @@ int main()
         << "Cash collected: " << vendingMachineWrapper.vendingMachinePtr->cashCollectedEuros << "€\n" 
         << "Item selected: " << vendingMachineWrapper.vendingMachinePtr->itemSelected << "\n"
         << "--- "
-        << "Charging customer for 5 items: " << vendingMachineWrapper.vendingMachinePtr->chargeCustomerEuros(*vendingMachineWrapper.vendingMachinePtr->kitkatDispenser, 5) << "€\n"
-        << "*** Dispenser number: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->itemNumber << "\n"
+        << "Charging customer for 5 items: " << vendingMachineWrapper.vendingMachinePtr->chargeCustomerEuros(vendingMachineWrapper.vendingMachinePtr->kitkatDispenser, 5) << "€\n"
+        << "*** Dispenser number: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.itemNumber << "\n"
         << "*** "
-        << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->isDisabled ? "Disabled" : "Activated") << "\n"
-        << "*** Product: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->name << "\n"
-        << "*** Flavour: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->flavour << "\n"
-        << "*** Inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->inventory << "\n"
-        << "*** Price: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->priceEuros << "€\n"
+        << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.isDisabled ? "Disabled" : "Activated") << "\n"
+        << "*** Product: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.name << "\n"
+        << "*** Flavour: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.flavour << "\n"
+        << "*** Inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.inventory << "\n"
+        << "*** Price: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.priceEuros << "€\n"
         << "--- "
         << (vendingMachineWrapper.vendingMachinePtr->dispenseKitkat(6) ? "Successfully" : "Unsuccessfully") << " dispensed\n"
         << "--- "
-        << "New item dispenser state: " << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->isDisabled ? "Disabled" : "Activated") << "\n";
+        << "New item dispenser state: " << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.isDisabled ? "Disabled" : "Activated") << "\n";
     
-    vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->stockUp(3);
+    vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.stockUp(3);
     std::cout 
         << "--- "
-        << "New item dispenser inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->inventory << "\n"
-        << "New item dispenser state: " << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->isDisabled ? "Disabled" : "Activated") << "\n"
+        << "New item dispenser inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.inventory << "\n"
+        << "New item dispenser state: " << (vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.isDisabled ? "Disabled" : "Activated") << "\n"
         << "--- "
         << (vendingMachineWrapper.vendingMachinePtr->dispenseKitkat(2) ? "Successfully" : "Unsuccessfully") << " dispensed\n"
         << "--- "
-        << "New item dispenser inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser->inventory << "\n";
+        << "New item dispenser inventory: " << vendingMachineWrapper.vendingMachinePtr->kitkatDispenser.inventory << "\n";
     
     std::cout << std::endl;
     ComputerWrapper computerWrapper( new Computer() );
     std::cout 
         << "--- "
-        << "Computer booted: " << (computerWrapper.computerPtr->bootUp(*computerWrapper.computerPtr->cDrive) ? "Yes" : "No") << "\n"
+        << "Computer booted: " << (computerWrapper.computerPtr->bootUp(computerWrapper.computerPtr->cDrive) ? "Yes" : "No") << "\n"
         << "Number of cores: " << computerWrapper.computerPtr->numCPUCores << "\n"
         << "CPU Frequency: " << computerWrapper.computerPtr->CPUFrequencyGHz << "GHz\n"
         << "RAM: " << computerWrapper.computerPtr->memoryMB << "MB\n"
         << "Power needed: " << computerWrapper.computerPtr->powerNeededW << "W\n"
         << "Operating system: " << computerWrapper.computerPtr->operatingSystem << "\n"
-        << "*** Drive brand: " << computerWrapper.computerPtr->cDrive->brand << "\n"
-        << "*** Drive capacity: " << computerWrapper.computerPtr->cDrive->capacityGB << "GB\n"
-        << "*** Drive RPM: " << computerWrapper.computerPtr->cDrive->standardRpm << "\n"
-        << "*** Drive read speed: " << computerWrapper.computerPtr->cDrive->readSpeedMBs << "MB/s\n"
+        << "*** Drive brand: " << computerWrapper.computerPtr->cDrive.brand << "\n"
+        << "*** Drive capacity: " << computerWrapper.computerPtr->cDrive.capacityGB << "GB\n"
+        << "*** Drive RPM: " << computerWrapper.computerPtr->cDrive.standardRpm << "\n"
+        << "*** Drive read speed: " << computerWrapper.computerPtr->cDrive.readSpeedMBs << "MB/s\n"
         << "--- "
-        << "*** Data read at address 123: " << computerWrapper.computerPtr->cDrive->readData(123) << "\n"
+        << "*** Data read at address 123: " << computerWrapper.computerPtr->cDrive.readData(123) << "\n"
         << "--- "
-        << "*** Writing data 456 at address 678 successful?: " << (computerWrapper.computerPtr->cDrive->writeData(678, 456) ? "Yes" : "No") << "\n"
+        << "*** Writing data 456 at address 678 successful?: " << (computerWrapper.computerPtr->cDrive.writeData(678, 456) ? "Yes" : "No") << "\n"
         << "--- ";
-    computerWrapper.computerPtr->runProgram(*computerWrapper.computerPtr->cDrive, "/usr/local/games/pacman/pacman");
+    computerWrapper.computerPtr->runProgram(computerWrapper.computerPtr->cDrive, "/usr/local/games/pacman/pacman");
     std::cout 
         << "--- "
         << "Computer crashed: " << (computerWrapper.computerPtr->crash() ? "Yes :(" : "No") << "\n"
         << "--- ";
-    computerWrapper.computerPtr->cDrive->parkHeads();
+    computerWrapper.computerPtr->cDrive.parkHeads();
     std::cout << std::endl;
     
     CatCyberOverlordWrapper catCyberOverlordWrapper( new CatCyberOverlord() );

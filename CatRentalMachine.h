@@ -3,14 +3,13 @@
 #include "LeakedObjectDetector.h"
 #include "Cat.h"
 #include "VendingMachine.h"
-#include "ItemDispenser.h"
 
 struct CatRentalMachine
 {
     Cat cat;
     VendingMachine vendingMachine;
 
-    CatRentalMachine(Cat& rentalCat);
+    CatRentalMachine(const Cat& rentalCat);
     ~CatRentalMachine();
 
     Cat distributeCat() const;

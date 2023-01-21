@@ -1,5 +1,10 @@
 #include <iostream>
 #include "Wrappers.h"
+#include "Cat.h"
+#include "VendingMachine.h"
+#include "Computer.h"
+#include "CatCyberOverlord.h"
+#include "CatRentalMachine.h"
 
 CatWrapper::CatWrapper(Cat* ptrToCat) : catPtr(ptrToCat) 
 { 

@@ -1,8 +1,6 @@
 #include "Computer.h"
-#include "Drive.h"
 
-Computer::Computer() :
-cDrive( new Drive() )
+Computer::Computer()
 {
     std::cout << "Computer being constructed" << std::endl;
 }
@@ -10,8 +8,6 @@ cDrive( new Drive() )
 Computer::~Computer()
 {
     std::cout << "Computer being destructed" << std::endl;
-    delete cDrive;
-    cDrive = nullptr;
 }
 
 bool Computer::bootUp(const Drive& systemDrive) const
@@ -33,5 +29,3 @@ bool Computer::crash() const
     }
     return (rand() % 1000000) == 0;
 }
-
-

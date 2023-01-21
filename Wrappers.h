@@ -1,9 +1,10 @@
 #pragma once
-#include "Cat.h"
-#include "VendingMachine.h"
-#include "Computer.h"
-#include "CatCyberOverlord.h"
-#include "CatRentalMachine.h"
+
+struct Cat;
+struct VendingMachine;
+struct Computer;
+struct CatCyberOverlord;
+struct CatRentalMachine;
 
 struct CatWrapper
 {

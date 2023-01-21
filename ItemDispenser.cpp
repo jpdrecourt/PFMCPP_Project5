@@ -1,4 +1,4 @@
-#include "ItemDispenser.h"
+#include "VendingMachine.h"
 
 VendingMachine::ItemDispenser::ItemDispenser() :
 name("KitKat"),
@@ -46,3 +46,4 @@ void VendingMachine::ItemDispenser::disable(std::string cause)
     }
     isDisabled = true;
 }
+

@@ -1,8 +1,6 @@
 #include "VendingMachine.h"
-#include "ItemDispenser.h"
 
-VendingMachine::VendingMachine() :
-kitkatDispenser ( new ItemDispenser() )
+VendingMachine::VendingMachine()
 {
     std::cout << "VendingMachine being constructed" << std::endl;
 }
@@ -10,8 +8,6 @@ kitkatDispenser ( new ItemDispenser() )
 VendingMachine::~VendingMachine()
 {
     std::cout << "VendingMachine being destructed" << std::endl;
-    delete kitkatDispenser;
-    kitkatDispenser = nullptr;
 }
 
 
@@ -28,7 +24,7 @@ float VendingMachine::chargeCustomerEuros(const ItemDispenser& item, int numberO
 bool VendingMachine::dispenseKitkat(int numberOfItems)
 {
     std::cout << "Attempt at dispensing " << numberOfItems << " items\n";
-    return kitkatDispenser->distributeItems(numberOfItems);
+    return kitkatDispenser.distributeItems(numberOfItems);
 }
 
 void VendingMachine::refrigerate() const
